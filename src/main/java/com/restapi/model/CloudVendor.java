@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "This table holds cloud vendor information.")
 public class CloudVendor {
     @Id
-    @Schema(description = "This is a Cloud Vendor Id. It shall be unique.")
+    @NotBlank(message = "Vendor Id is mandatory")
     private String vendorId;
     @NotBlank(message = "Vendor Name is mandatory")
     private String vendorName;
