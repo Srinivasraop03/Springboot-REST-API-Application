@@ -8,12 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class CloudVendorServiceImpl implements CloudVendorService {
 
-    CloudVendorRepository cloudVendorRepository;
+    private final CloudVendorRepository cloudVendorRepository;
 
     public CloudVendorServiceImpl(CloudVendorRepository cloudVendorRepository) {
         this.cloudVendorRepository = cloudVendorRepository;
@@ -21,40 +19,38 @@ public class CloudVendorServiceImpl implements CloudVendorService {
 
     @Override
     public CloudVendor createCloudVendor(CloudVendor cloudVendor) {
-        // More Business Logic
+        if (cloudVendor == null) {
+            throw new IllegalArgumentException("CloudVendor cannot be null");
+        }
         return cloudVendorRepository.save(cloudVendor);
     }
 
     @Override
     public CloudVendor updateCloudVendor(CloudVendor cloudVendor) {
-        // More Business Logic
+        String vendorId = cloudVendor.getVendorId();
+        if (vendorId == null || cloudVendorRepository.findById(vendorId).isEmpty()) {
+            throw new CloudVendorNotFoundException(
+                    "Cloud Vendor with ID " + (vendorId != null ? vendorId : "null") + " not found for update.");
+        }
         return cloudVendorRepository.save(cloudVendor);
     }
 
     @Override
     public void deleteCloudVendor(String cloudVendorId) {
-        // More Business Logic
+        if (cloudVendorId == null || !cloudVendorRepository.existsById(cloudVendorId)) {
+            throw new CloudVendorNotFoundException(
+                    "Cloud Vendor with ID " + cloudVendorId + " not found for deletion.");
+        }
         cloudVendorRepository.deleteById(cloudVendorId);
     }
 
     @Override
     public CloudVendor getCloudVendor(String cloudVendorId) {
-        // More Business Logic
-        if(cloudVendorRepository.findById(cloudVendorId).isEmpty())
-            throw new CloudVendorNotFoundException("Requested Cloud Vendor does not exist");
-        return cloudVendorRepository.findById(cloudVendorId).get();
-    }
-
-    @Override
-    public List<CloudVendor> getAllCloudVendors() {
-        // More Business Logic
-        return cloudVendorRepository.findAll();
-    }
-
-    @Override
-    public List<CloudVendor> getByVendorName(String vendorName)
-    {
-        return cloudVendorRepository.findByVendorName(vendorName);
+        if (cloudVendorId == null) {
+            throw new CloudVendorNotFoundException("Cloud Vendor ID cannot be null");
+        }
+        return cloudVendorRepository.findById(cloudVendorId)
+                .orElseThrow(() -> new CloudVendorNotFoundException("Requested Cloud Vendor does not exist"));
     }
 
     @Override

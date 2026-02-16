@@ -1,7 +1,6 @@
 package com.restapi.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,12 +8,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="cloud_vendor_info")
-@ApiModel(description = "This table holds cloud vendor information.")
-public class CloudVendor
-{
+@Table(name = "cloud_vendor_info")
+@Schema(description = "This table holds cloud vendor information.")
+public class CloudVendor {
     @Id
-    @ApiModelProperty(notes="This is a Cloud Vendor Id. It shall be unique.")
+    @Schema(description = "This is a Cloud Vendor Id. It shall be unique.")
     private String vendorId;
     @NotBlank(message = "Vendor Name is mandatory")
     private String vendorName;
@@ -63,5 +61,23 @@ public class CloudVendor
 
     public void setVendorPhoneNumber(String vendorPhoneNumber) {
         this.vendorPhoneNumber = vendorPhoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        CloudVendor that = (CloudVendor) o;
+        return java.util.Objects.equals(vendorId, that.vendorId) &&
+                java.util.Objects.equals(vendorName, that.vendorName) &&
+                java.util.Objects.equals(vendorAddress, that.vendorAddress) &&
+                java.util.Objects.equals(vendorPhoneNumber, that.vendorPhoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(vendorId, vendorName, vendorAddress, vendorPhoneNumber);
     }
 }
