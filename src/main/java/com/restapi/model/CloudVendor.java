@@ -1,11 +1,11 @@
 package com.restapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @Table(name = "cloud_vendor_info")
